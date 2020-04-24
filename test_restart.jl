@@ -1,5 +1,10 @@
 using HTTP, JSON
 
+# X-RateLimit-Limit: 60
+# X-RateLimit-Remaining: 56
+# X-RateLimit-Reset: 1372700873
+
+
 function getCurrentCommit(owner, repo)
     headers = Dict(
         # "Accept" => "application/vnd.github.VERSION.sha",
@@ -7,7 +12,7 @@ function getCurrentCommit(owner, repo)
     )
     try
         resp = HTTP.get("https://api.github.com/repos/$owner/$repo/git/ref/heads/master", headers)
-        # @show resp.body
+        println("Requests remaining: $(Dict(resp.headers)["X-RateLimit-Remaining"])")
         resp = JSON.parse(String(resp.body))
         return resp["object"]["sha"]
     catch e

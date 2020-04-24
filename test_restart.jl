@@ -26,19 +26,21 @@ function main()
     repo = "ServerTesting"
     v = 1
     sha = getCurrentCommit(owner, repo)
+    sleep(5)
 
-    # Check whether github repo has updated
-    if !repoUpdated(sha, owner, repo)
-        # if not, do work
-        println("sleeping... V$v")
-        sleep(10)
-    else
-        # if repo is updated, re-run PROGRAM_FILE
-        println("restarting... V$v")
-        atexit(() -> run(command))
-        exit(0)
+    while true
+        # Check whether github repo has updated
+        if !repoUpdated(sha, owner, repo)
+            # if not, do work
+            println("sleeping... V$v")
+            sleep(10)
+        else
+            # if repo is updated, re-run PROGRAM_FILE
+            println("restarting... V$v")
+            atexit(() -> run(command))
+            exit(0)
+        end
     end
-
 end
 
 

@@ -12,10 +12,11 @@ function getCurrentCommit(owner, repo)
     )
     try
         resp = HTTP.get("https://api.github.com/repos/$owner/$repo/git/ref/heads/master", headers)
-        println("Requests remaining: $(Dict(resp.headers)["X-RateLimit-Remaining"])")
-        resp = JSON.parse(String(resp.body))
-        return resp["object"]["sha"]
+        println("Requests remaining: $(Dict(resp.headers)["X-Ratelimit-Remaining"])")
+        respbody = JSON.parse(String(resp.body))
+        return respbody["object"]["sha"]
     catch e
+        @show resp
         throw(e)
     end
 end
@@ -29,7 +30,7 @@ function main()
     command = `julia $PROGRAM_FILE`
     owner = "jonathan-durbin"
     repo = "ServerTesting"
-    v = 1
+    v = 3
     sha = getCurrentCommit(owner, repo)
     sleep(5)
 
